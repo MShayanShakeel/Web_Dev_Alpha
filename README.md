@@ -1,3 +1,11 @@
+Metro Shoes over the years, has established its reputation as one of the finest brands in fashion footwear and accessories all across the country and beyond borders, showcasing a large variety of casual, seasonal, formal, fancy and bridal collections in ladies shoes, clutches, handbags and men’s shoes, keeping in perspective the varied communal likes, interests and aspirations. Metro imports, as well locally produces, a pleasingly diverse line of distinctive designs that comprehensively caters to market sentiments. Metro Shoes has become one of the first shoe brands that women could turn to for feminine style they coveted and comfort they thought was impossible to attain. With rich leathers and unique details, Metro Shoes has captured the essence of modern femininity… whether that means taking a leisurely walk or running a board meeting. Metro Shoes pampers your feet with the cushioned, contoured foot bed and experience all-day comfort! The best service, the best price, and the best design, all over the world.
+
+Mission
+Our mission is to be the biggest and the best leader in Pakistan’s footwear industry by offering trendy, elegant and sophisticated shoes with tremendous quality, superior customer services and highly modern techniques.
+
+Core Values
+Excellence:
+Our Vision is to strive for continuous improvement, taking timely & quality decisions and making affirmative contribution towards the achievement of our goals thus responding effectively to customer needs and being able to grasp the hearts of our valued customers.
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
