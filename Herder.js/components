@@ -1,0 +1,406 @@
+#BANNER-PAGE
+
+import React, { useState } from 'react'
+import { Slider1, Slider2 ,Slider3 ,Slider4 } from '../assets/Index';
+import {BsArrowRightShort ,BsArrowLeftShort} from 'react-icons/bs';
+
+const Banner = () => {
+    const [currentSlide , setcurrentSlide ]= useState(0)  
+    const data = [Slider1,Slider2 ,Slider3 ,Slider4]; 
+    const RightSlide=()=>{
+        setcurrentSlide(currentSlide === 3 ? 0 :(prev)=> prev + 1) 
+    };
+    const LeftSlide =()=>{
+        setcurrentSlide(currentSlide === 0 ? 3 :(prev)=> prev - 1)
+    };
+    console.log(currentSlide);
+  return (
+    <div className="w-full h-auto overflow-x-hidden">
+      <div className="w-screen h-[650px] relative">
+        <div style={{transform: `translateX(-${currentSlide * 100}vw)`}}
+         className="w-[400vw] h-full flex transition-transform duration-1000">
+            <img className="w-full h-full object-cover" src={data [0]} alt="Slider1" loading='priority' />
+            <img className="w-full h-full object-cover" src={data [1]} alt="Slider2"  />
+            <img className="w-full h-full object-cover" src={data [2]} alt="Slider3"  />
+            <img className="w-full h-full object-cover" src={data [3]} alt="Slider4" />
+            </div>
+            <div className="absolute w-fit left-0 right-0 mx-auto flex gap-8 bottom-44">
+            <div onClick={LeftSlide} className="w-14 h-12 border-[1px] bg-white border-gray-700 flex items-center justify-center
+             hover:cursor-pointer hover:bg-gray-700 hover:text-white active:bg-gray-900 
+             diration-300 ">
+            <BsArrowLeftShort />
+           </div>
+           <div onClick={RightSlide} className="w-14 h-12 border-[1px] bg-white border-gray-700 flex items-center justify-center
+             hover:cursor-pointer hover:bg-gray-700 hover:text-white active:bg-gray-900 
+             diration-300 ">
+            <BsArrowRightShort />
+           </div>
+           
+           </div>
+          
+            </div>
+          </div>
+  )
+}
+
+export default Banner
+
+
+
+
+
++-------+------+
+#CARD-ITEM
+
+import React from 'react'
+import { MdOutlineClose} from'react-icons/md'
+import {HiOutlineArrowLeft} from 'react-icons/hi'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteItem ,resetcart, incrimentQut ,decrimentQut } from '../redux/Bazarslice';
+import { ToastContainer , toast } from "react-toastify";
+import { Link } from 'react-router-dom';
+const Carditem = () => {
+  const dispatch = useDispatch();
+  const productData = useSelector((state)=> state.bazar.productData);
+  return (
+    <div className="w-2/3 pr-10">
+      <div className="w-full">
+        <h2 className="font-titleFont text-2xl">Shopping cart</h2>
+      </div>
+      <div>
+        { productData.map((iitem)=> (                 
+            <div  key={iitem._id}  
+            className="flex items-center justify-between gap-6 mt-6">
+
+              <div className="flex items-center gap-2">
+                <MdOutlineClose onClick={()=>dispatch(deleteItem(iitem._id))& toast.error(`${iitem.title}is removed`)}
+                 className="text-xl text-gray-600
+               hover:text-red-600 cursor-pointer duration-300"/>
+               <img className="w-32 h-32 object-cover" 
+               src={iitem.image} alt="prodictImg" />
+        </div>
+              <h2 className="w-52">{iitem.title}</h2>
+              <p className="w-10">${iitem.price}</p>
+              <div className="flex items-center justify-between w-52 gap-4 text-gray-500 border p-3">
+              <p className="text-sm"> Quantity </p>
+              <div className="flex items-center gap-4 text-sm font-semibold">
+               <button
+                 onClick={()=>
+                  dispatch(
+                    decrimentQut({
+                    _id: iitem._id,
+                    title: iitem.title,
+                    image: iitem.image,
+                    price: iitem.price,
+                    quantity: 1,
+                    description: iitem.description,
+                  }))}
+                  className="border h-6 text-lg font-normal felx justify-center items-center 
+                    px-2 hover:bg-gray-700 hover:text-white cursor-pointer duration-300 active:bg-black"
+                >
+                  -
+                </button>
+                {iitem.quantity}
+                <button
+                onClick={()=>
+                  dispatch(
+                    incrimentQut({
+                    _id: iitem._id,
+                    title: iitem.title,
+                    image: iitem.image,
+                    price: iitem.price,
+                    quantity: 1,
+                    description: iitem.description,
+                  }))}
+                  className="border h-6 text-lg font-normal flex justify-center items-center 
+                    px-2 hover:bg-gray-700 hover:text-white cursor-pointer duration-300 active:bg-black"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <p className="w-14">${iitem.quantity * iitem.price}</p>
+            </div>
+           ))
+        }
+      </div>
+      <button onClick={()=> dispatch(resetcart()) & toast.error("your cart is Empty") } className="bg-red-500 text-white  mt-8 ml-7 py-1 px-8 hover:bg-red-800 
+      duration-300">Reset Cart</button>
+      <Link to="/">
+      <button className="mt-8 ml-7 flex text-center hover:text-black gap-1
+       text-gray-400 duration-300">
+      
+        <span><HiOutlineArrowLeft/></span>
+        Goto Shopping
+      </button>
+      </Link>
+      <ToastContainer 
+      position="top-left"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+      />
+    </div>
+  )
+};
+
+export default Carditem;
+
+
++--------+-------+
+#PRODUCT-PAGE
+
+import React from 'react'
+import Productcart from "../componets/Productcart";
+
+
+const Product = ({products}) => {
+  console.log(products);
+  return (
+    <div className="py-10">
+      <div className="flex flex-col items-center gap-4">
+        <h1 className="text-2x1 bg-black text-white py-2 w-80 text-center">
+            Shopping Every Day</h1>
+        <span className="w-20 h-[3px] color-black"></span>
+            <p className="max-w-[700px] text-gray-600 text-center">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium libero commodi,
+                 excepturi dolorem eveniet at earum et tenetur officiis ex magni, 
+                ullam assumenda esse nobis ratione, voluptatibus debitis facilis architecto.
+            </p>
+            </div>
+        <div className="max-w-screen-xl mx-auto py-10 grid grid-cols-4 gap-10">
+          {
+            products.map((item)=>
+            (
+              <Productcart key={item.id} product = {item}/>
+            ))
+          }
+       
+      </div>
+    </div>
+  );
+};
+
+export default Product
+
+
+
++------+-------------+
+#PRODUCT-CARD
+
+import React from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { BsArrowBarRight } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { addTocart } from "../redux/Bazarslice";
+import { ToastContainer , toast } from "react-toastify";
+
+const Productcart = ({ product }) => {
+  const dispatch = useDispatch(); 
+  const navigate = useNavigate();
+  const _id = product.title ;
+  const idString =(_id)=>{
+    return String(_id).toLowerCase().split(" ").join("");
+  };
+  const rootID = idString(_id);
+
+  const handledetail=()=>{
+    navigate(`/product/${rootID}`,{
+      state: {
+        item : product,
+      },
+    });
+
+  };
+  return (
+    <div className="group relative">
+      <div onClick={handledetail} className="w-full h-96 cursor-pointer overflow-hidden">
+        <img
+          className="w-full h-full object-cover group-hover:scale-125 duration-500"
+          src={product.image}
+          alt="ProductImg"
+        />
+      </div>
+      <div className="w-full border-[1px] px-2 py-4">
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="font-tittleFont text-base font-bold">
+              {product.title.substring(0, 15)}
+            </h2>
+          </div>
+          <div className="flex gap-2 justify-end relative overflow-hidden w-28 text-sm">
+            <div className="flex gap-2 group-hover:translate-x-24
+            transition-transform duration-500">
+              <p className="font-semibold">${product.price}</p>
+            </div>
+            <p onClick={()=> dispatch(addTocart({
+              _id: product._id,
+              title: product.title,
+              image: product.image,
+              price: product.price,
+              quantity: 1,
+              description: product.description,
+            })
+            ) & toast.success(`${product.title} is added`)
+          }
+           className="absolute z-20 w-[100px] text-gray-500 hover:text-gray-900
+            flex-item-center gap-1 top-0 transform -translate-x-32 group-hover:translate-x-0
+            transition-transform cursor-pointer duration-500"> Add to cart{" "} <span>
+              <BsArrowBarRight/>
+            </span> </p>
+          </div>
+        </div>
+        <div className="absolute top-4 right-0">
+          
+        {product.isNew &&(
+            <p className="bg-black text-white font-semibold font-titleFont px-6 py-1">Sale</p>
+          )}
+        </div>
+      </div>
+      <ToastContainer 
+      position="top-left"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+      />
+    </div>
+  );
+};
+
+export default Productcart;
+
++---------+-----------+
+
+#SINGLE-PRODUCT
+
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { BsStarFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { addTocart } from "../redux/Bazarslice";
+import { ToastContainer , toast } from "react-toastify";
+
+const Singleproduct = () => {
+  const dispatch = useDispatch();
+  const [detail, setdetail] = useState({});
+  let [baseQty, setbaseQty] = useState(1);
+  const Location = useLocation();
+  useEffect(() => {
+    setdetail(Location.state.item);
+  }, []);
+  return (
+    <div>
+      <div className="max-w-screen-xl mx-auto my-10 flex gap-10">
+        <div className="w-2/5 relative">
+          <img
+            className="w-full h-[550px] object-cover"
+            src={detail.image}
+            alt="productImg"
+          />
+          <div className="absolute top-4 right-0">
+            {detail.isNew && (
+              <p className="bg-black text-white font-semibold font-titleFont px-6 py-1">
+                Sale
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="w-3/5 flex flex-col justify-center gap-12">
+          <div className="div">
+            <h2 className="text-4x1 font-semibold">{detail.title}</h2>
+            <div className="flex items-center gap-4 mt-3">
+              <p className="text-2x1 font-medium text-gray-900">
+                ${detail.price}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-base">
+            <div className="flex gap-2">
+              <BsStarFill />
+              <BsStarFill />
+              <BsStarFill />
+              <BsStarFill />
+              <BsStarFill />
+            </div>
+            <div className="text-xs text-gray-500">(1 customer review)</div>
+          </div>
+          <p className="text-base text-gray-500 -mt-3">{detail.description}</p>
+          <div className="flex gap-4">
+            <div className="flex items-center justify-between w-52 gap-4 text-gray-500 border p-3">
+              <p className="text-sm"> Quantity </p>
+              <div className="flex items-center gap-4 text-sm font-semibold">
+                <button
+                  onClick={() =>
+                    setbaseQty(baseQty === 1 ? (baseQty = 1) : baseQty - 1)
+                  }
+                  className="border h-6 text-lg font-normal felx justify-center items-center 
+                    px-2 hover:bg-gray-700 hover:text-white cursor-pointer duration-300 active:bg-black"
+                >
+                  -
+                </button>
+
+                <span>{baseQty} </span>
+                <button
+                  onClick={() => setbaseQty(baseQty + 1)}
+                  className="border h-6 text-lg font-normal flex justify-center items-center 
+                    px-2 hover:bg-gray-700 hover:text-white cursor-pointer duration-300 active:bg-black"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <button 
+            onClick={()=>
+              dispatch(
+              addTocart({
+                _id: detail._id,
+                title: detail.title,
+                image: detail.image,
+                price: detail.price,
+                quantity: baseQty,
+                description: detail.description,
+              })
+            ) & toast.success(`${detail.title} is added`)
+          }
+            className="py-3 px-5 bg-black text-white active:bg-gray-800">
+              Add to cart
+            </button>
+          </div>
+          <p className="text-base text-gray-500">
+            Details :
+            <span className="font-medium capitalize">{detail.category}</span>
+          </p>
+        </div>
+      </div>
+      <ToastContainer 
+      position="top-left"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+      />
+    </div>
+  );
+};
+
+export default Singleproduct;
+
+
